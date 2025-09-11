@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-bgcolor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-bgcolor
+  template:
+    metadata:
+      labels:
+        app: flask-bgcolor
+    spec:
+      containers:
+      - name: flask-bgcolor
+        image: gregkoul/webapp-flask-bgcolor:2.0
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-bgcolor-service
+spec:
+  type: ClusterIP
+  selector:
+    app: flask-bgcolor
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flask-bgcolor-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  #- host: eee20387277.duckdns.org
+   - http:
+      paths:
+      - path: /flask-hpa
+        pathType: Prefix
+        backend:
+          service:
+            name: flask-bgcolor-service
+            port:
+              number: 80
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: flask-bgcolor
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: flask-bgcolor
+  minReplicas: 1
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 120
+#default scale down at 300s -> set to 120s
