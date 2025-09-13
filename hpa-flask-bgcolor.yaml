@@ -26,6 +26,8 @@ spec:
         #volumeMounts:
         #- name: app-logs
         #  mountPath: /logs
+        #- name: data
+        #  mountPath: /data
         resources:
           requests:
             cpu: "100m"
@@ -33,10 +35,13 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"
-      volumes:
-      - name: app-logs
-        persistentVolumeClaim:
-          claimName: app-logs-pvc
+      #volumes:
+      #- name: app-logs
+      #  persistentVolumeClaim:
+      #    claimName: app-logs-pvc
+      #- name: data
+      #  persistentVolumeClaim:
+      #    claimName: data-pvc
 
 ---
 
