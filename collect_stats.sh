@@ -1,5 +1,6 @@
 RUNTIME=$1 # e.g., containerd or crio
 OUTFILE=benchmark_${RUNTIME}_$(date +%s).log
+#NEW#OUTFILE=/mnt/data_drive/benchmark_logs/benchmark_${RUNTIME}_$(date +%s).log
 DURATION=60
 INTERVAL=5
 

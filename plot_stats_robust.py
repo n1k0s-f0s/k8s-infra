@@ -3,8 +3,11 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 LOG_FILE = sys.argv[1] if len(sys.argv) > 1 else "benchmark_containerd_1756888754.log"
+#NEW#LOG_FILE = sys.argv[1] if len(sys.argv) > 1 else ""
 NAME_FILTER = sys.argv[2] if len(sys.argv) > 2 else "flask-bgcolor"
 SAVE = True  # always save PNGs for headless servers
+#NEW#PLOT_DIR = "/mnt/data_drive/plots"
+#NEW#Make sure the directory is created: sudo mkdir -p /mnt/data_drive/plots sudo chown $USER:$USER /mnt/data_drive/plots
 
 def parse_memory(mem_str):
     s = mem_str.strip()
@@ -129,6 +132,7 @@ plt.grid(True)
 plt.tight_layout()
 if SAVE:
     plt.savefig("cpu_total1.png")
+    #NEW#plt.savefig(os.path.join(PLOT_DIR,"cpu_total.png"))
     print("Saved cpu_total1.png")
 else:
     plt.show()
@@ -142,6 +146,7 @@ plt.grid(True)
 plt.tight_layout()
 if SAVE:
     plt.savefig("mem_total1.png")
+    #NEW#plt.savefig(os.path.join(PLOT_DIR,"mem_total.png"))
     print("Saved mem_total1.png")
 else:
     plt.show()
