@@ -17,6 +17,15 @@ spec:
         image: gregkoul/webapp-flask-bgcolor:2.0
         ports:
         - containerPort: 8000
+        #command: ["/bin/sh","-c"]
+        #args:
+        #  - |
+        #    set -e
+        #    mkdir -p /logs
+        #    exec python app.py 2>&1 | tee -a /logs/app.log
+        #volumeMounts:
+        #- name: app-logs
+        #  mountPath: /logs
         resources:
           requests:
             cpu: "100m"
@@ -24,6 +33,10 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"
+      volumes:
+      - name: app-logs
+        persistentVolumeClaim:
+          claimName: app-logs-pvc
 
 ---
 
